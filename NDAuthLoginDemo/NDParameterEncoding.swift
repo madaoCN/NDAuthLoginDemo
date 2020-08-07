@@ -66,7 +66,7 @@ class NDURLEncoding: NDParameterEncoding {
     /// The encoding to use for `Bool` parameters.
     public let boolEncoding: BoolEncoding
     
-    private func query(_ parameters: [String: Any]) -> String {
+    public func query(_ parameters: [String: Any]) -> String {
         var components: [(String, String)] = []
 
         for key in parameters.keys.sorted(by: <) {
@@ -76,7 +76,7 @@ class NDURLEncoding: NDParameterEncoding {
         return components.map { "\($0)=\($1)" }.joined(separator: "&")
     }
     
-    private func queryComponents(_ parameters: [String: Any]) -> [(String, String)] {
+    public func queryComponents(_ parameters: [String: Any]) -> [(String, String)] {
         var components: [(String, String)] = []
 
         for key in parameters.keys.sorted(by: <) {

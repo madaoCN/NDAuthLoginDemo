@@ -25,16 +25,31 @@ class ViewController: UIViewController {
         let appSign = "com.madao.NDAuthLoginDemo".nd_md5()
         // 时间戳
         let ts = Int(Date.init().timeIntervalSince1970)
+        // 请求参数
+        var params: [String : Any] = ["appId": appId, "appSign": appSign, "timeStamp": ts]
         // 构造请求url
         let url = "nd.aqcenter://oncetoken/auth"
         guard let requestURL = URL.init(string: url) else {
             return
         }
-        // 添加参数
+        // 构造签名
+        let sign = self.buildSign(params)
+        // 添加签名
+        params["sign"] = sign ?? ""
+        // 重新构造url
         let urlEncoding = NDURLEncoding.init()
-        let encodedURL = urlEncoding.encode(requestURL, with: ["appId": appId, "appSign": appSign, "timeStamp": ts])
+        let encodedURL = urlEncoding.encode(requestURL, with: params)
         // 拉起应用
         UIApplication.shared.openURL(encodedURL)
+    }
+    
+    func buildSign(_ parameters: [String: Any]) -> String? {
+        
+        let urlEncoding = NDURLEncoding.init()
+        // key字典序排序, 小写
+        let sortedQuery = urlEncoding.query(parameters).lowercased()
+        // 先进行base64，再进行md5
+        return sortedQuery.nd_base64()?.nd_md5()
     }
 }
 
@@ -46,5 +61,10 @@ extension String {
         var uint8Array = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
         CC_MD5(ccharArray, CC_LONG(ccharArray!.count - 1), &uint8Array)
         return uint8Array.reduce("") { $0 + String(format: "%02X", $1) }.lowercased()
+    }
+    
+    func nd_base64() -> String? {
+        
+        return self.data(using: String.Encoding.utf8)?.base64EncodedString()
     }
 }
