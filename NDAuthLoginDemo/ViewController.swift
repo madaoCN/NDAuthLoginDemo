@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         // 时间戳
         let ts = Int(Date.init().timeIntervalSince1970)
         // 请求参数
-        var params: [String : Any] = ["appId": appId, "appSign": appSign, "timeStamp": ts]
+        var params: [String : Any] = ["appId": appId, "appSign": appSign, "timestamp": ts]
         // 构造请求url
         let url = "nd.aqcenter://oncetoken/auth"
         guard let requestURL = URL.init(string: url) else {

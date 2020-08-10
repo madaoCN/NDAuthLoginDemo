@@ -25,26 +25,24 @@ extension AppDelegate {
     
     //MARK: 支持所有iOS系统
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        
-        self._handle(openUrl: url)
-        return true
+    
+        return self._handle(openUrl: url)
     }
     
     //MARK: 支持所有iOS系统
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         
-        self._handle(openUrl: url)
-        return true
+        return self._handle(openUrl: url)
     }
     
     //MARK: iOS9之上
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        self._handle(openUrl: url)
-        return true
+        return self._handle(openUrl: url)
     }
     
     /// 事件处理
+    /// 示例数据： aq20200807://oauth?errCode=-1&onceCode=1111111111111111111&sign=daf78c74332d1b3fee6f02f953a38dab&timestamp=1597045&type=1000
     private func _handle(openUrl url: URL) -> Bool {
         
         // 解析参数
@@ -79,6 +77,45 @@ extension AppDelegate {
         
         // MARK: TODO 根据参数做对应处理
         
+        // 获取type
+        let type = checkParams["type"] as? String
+        // 获取errcode
+        let errCode = checkParams["errCode"] as? String
+        // 获取oncecode
+        let onceCode = checkParams["onceCode"] as? String
+        
+        // 登录类型
+        if type == "1000" {
+            
+            var alert: UIAlertController!
+
+            // 判断 errCode
+            switch errCode {
+            case "-1":
+                // 返回一次性登录token
+                alert = UIAlertController(title: "提示", message: "获取token成功：\(onceCode ?? "")", preferredStyle: .alert)
+                break
+            case "1100":
+                // 用户拒绝
+                alert = UIAlertController(title: "提示", message: "用户拒绝了授权", preferredStyle: .alert)
+                break
+            case "1200":
+                // 用户取消
+                alert = UIAlertController(title: "提示", message: "用户取消了授权", preferredStyle: .alert)
+                break
+            case "1300":
+                // 获取token失败
+                alert = UIAlertController(title: "提示", message: "获取token失败", preferredStyle: .alert)
+                break
+            default:
+                alert = UIAlertController(title: "提示", message: "未知错误", preferredStyle: .alert)
+                break
+            }
+            
+            alert?.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: { _ in
+            }))
+            self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+        }
         
         return true
     }
@@ -94,10 +131,13 @@ extension AppDelegate {
     
     func buildSign(_ parameters: [String: Any]) -> String? {
         
-        let urlEncoding = NDURLEncoding.init()
-        // key字典序排序, 小写
-        let sortedQuery = urlEncoding.query(parameters).lowercased()
+        var str = ""
+        str += "errCode=\(parameters["errCode"] ?? "")&"
+        str += "onceCode=\(parameters["onceCode"] ?? "")&"
+        str += "timestamp=\(parameters["timestamp"] ?? "")&"
+        str += "type=\(parameters["type"] ?? "")"
+        
         // 先进行base64，再进行md5
-        return sortedQuery.nd_base64()?.nd_md5()
+        return str.nd_base64()?.nd_md5()
     }
 }
