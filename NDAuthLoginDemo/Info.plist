@@ -25,12 +25,12 @@
 			<string>nd.aqcenter</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>aq20200807</string>
+				<string>thirdpart</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

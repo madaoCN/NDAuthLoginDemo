@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5o-pj-xVc">
-                                <rect key="frame" x="161" y="144" width="92" height="44"/>
+                                <rect key="frame" x="161" y="244" width="92" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="BLY-QU-uxh"/>
                                 </constraints>
@@ -26,14 +26,39 @@
                                     <action selector="handlerAuthLoginAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qxk-pu-j2h"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未获取到token" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BtK-1R-cw6">
+                                <rect key="frame" x="15" y="206" width="384" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtB-Te-5rG">
+                                <rect key="frame" x="15" y="303" width="384" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="0uP-dn-wM1"/>
+                                </constraints>
+                                <state key="normal" title="验证token"/>
+                                <connections>
+                                    <action selector="verifyToken:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4a5-5k-xAE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="F5o-pj-xVc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="MlZ-dh-Nq9"/>
+                            <constraint firstItem="dtB-Te-5rG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="20A-WW-dLz"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dtB-Te-5rG" secondAttribute="trailing" constant="15" id="5uC-lt-Phl"/>
+                            <constraint firstItem="dtB-Te-5rG" firstAttribute="top" secondItem="F5o-pj-xVc" secondAttribute="bottom" constant="15" id="Lgr-gR-GNO"/>
+                            <constraint firstItem="F5o-pj-xVc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="200" id="MlZ-dh-Nq9"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="BtK-1R-cw6" secondAttribute="trailing" constant="15" id="NYc-AR-ZPO"/>
+                            <constraint firstItem="BtK-1R-cw6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="n3M-6j-XCW"/>
                             <constraint firstItem="F5o-pj-xVc" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="pDj-nG-wMn"/>
+                            <constraint firstItem="F5o-pj-xVc" firstAttribute="top" secondItem="BtK-1R-cw6" secondAttribute="bottom" constant="20" id="skt-6v-gjM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="tokenLabel" destination="BtK-1R-cw6" id="5uG-wy-jl3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

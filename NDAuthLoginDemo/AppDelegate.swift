@@ -96,6 +96,7 @@ extension AppDelegate {
             case "-1":
                 // 返回一次性登录token
                 alert = UIAlertController(title: "提示", message: "获取token成功：\(onceCode ?? "")", preferredStyle: .alert)
+                NotificationCenter.default.post(name: .RECEIVED_TOKEN, object: onceCode)
                 break
             case "1100":
                 // 用户拒绝
