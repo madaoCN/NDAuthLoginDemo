@@ -77,46 +77,52 @@ class ViewController: UIViewController {
         let uploadRequest = URLRequest.init(url: requestURL)
         URLSession.shared.dataTask(with: uploadRequest) {[weak self] (data, response, error) in
             
+            DispatchQueue.main.async {
             
-            guard error == nil else {
+                guard error == nil else {
+                    
+                    // 发生了错误
+                    print("verify error")
+                    
+                    let alert = UIAlertController(title: "提示", message: "认证失败", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: nil))
+                    self?.present(alert, animated: true, completion: nil)
+                    return
+                }
                 
-                // 发生了错误
-                print("verify error")
+                guard let httpResponse = response as? HTTPURLResponse,
+                    (200...299).contains(httpResponse.statusCode) else {
+                        print("Status code error \n")
+                        
+                        let alert = UIAlertController(title: "提示", message: "认证请求返回状态码不正确", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: nil))
+                        self?.present(alert, animated: true, completion: nil)
+                        return
+                }
                 
-                let alert = UIAlertController(title: "提示", message: "认证失败", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: nil))
+                guard let dt = data,
+                    let jsonString = String.init(data: dt, encoding: .utf8) else {
+                        
+                        print("parse data error")
+                        
+                        let alert = UIAlertController(title: "提示", message: "认证请求返回数据不正确", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: nil))
+                        self?.present(alert, animated: true, completion: nil)
+                        return
+                }
+                print("verify success")
+                print(jsonString)
+                
+                
+                let alert = UIAlertController(title: "提示", message: "认证成功：\(jsonString)", preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: ))
+                alert.addAction(UIAlertAction.init(title: "知道了", style: .cancel, handler: {[weak self] (action) in
+                    
+                    self?.tokenLabel.text = "未获取到token"
+                }))
+
                 self?.present(alert, animated: true, completion: nil)
-                return
             }
-            
-            guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                    print("Status code error \n")
-                    
-                    let alert = UIAlertController(title: "提示", message: "认证请求返回状态码不正确", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: nil))
-                    self?.present(alert, animated: true, completion: nil)
-                    return
-            }
-            
-            guard let dt = data,
-                let jsonString = String.init(data: dt, encoding: .utf8) else {
-                    
-                    print("parse data error")
-                    
-                    let alert = UIAlertController(title: "提示", message: "认证请求返回数据不正确", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: nil))
-                    self?.present(alert, animated: true, completion: nil)
-                    return
-            }
-            print("verify success")
-            print(jsonString)
-            
-            
-            let alert = UIAlertController(title: "提示", message: "认证成功：\(jsonString)", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "知道了", style: .cancel, handler: nil))
-            self?.present(alert, animated: true, completion: nil)
-            
         }.resume()
     }
     
